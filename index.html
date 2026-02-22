@@ -15,17 +15,17 @@ body {
 }
 
 header {
-  padding: 80px 20px;
+  padding: 60px 20px;
   text-align: center;
 }
 
 header h1 {
-  font-size: 42px;
+  font-size: 36px;
   margin-bottom: 20px;
 }
 
 header p {
-  font-size: 18px;
+  font-size: 16px;
   max-width: 800px;
   margin: auto;
   color: #bbb;
@@ -33,7 +33,8 @@ header p {
 
 section {
   max-width: 800px;
-  margin: 60px auto;
+  margin: 40px auto;
+  padding: 0 10px;
 }
 
 select {
@@ -52,9 +53,9 @@ select {
   padding: 20px;
   background: #1a1a1a;
   border-radius: 12px;
+  word-wrap: break-word;
 }
 
-/* Новая секция добавления зерна */
 .add-coffee {
   margin-top: 40px;
   padding: 20px;
@@ -79,6 +80,19 @@ select {
   color: #fff;
   font-weight: bold;
   cursor: pointer;
+  transition: background 0.3s;
+}
+.add-coffee button:hover {
+  background: #e55a00;
+}
+
+/* Адаптив */
+@media(max-width: 600px) {
+  header h1 { font-size: 28px; }
+  header p { font-size: 14px; }
+  section { margin: 20px auto; padding: 0 5px; }
+  select { font-size: 14px; }
+  .add-coffee button { width: 100%; }
 }
 </style>
 </head>
@@ -94,12 +108,87 @@ select {
   <label>Выбери зерно:</label>
   <select id="coffeeSelect" onchange="showCoffee()">
     <option value="">— выбрать —</option>
-    <option value="brazil">Бразилия Серрадо</option>
-    <option value="ethiopia">Эфиопия Натурал</option>
   </select>
 
   <div class="result" id="result" style="display:none;">
     <p><strong>Клики:</strong> <span id="clicks"></span></p>
     <p><strong>Рецепт:</strong> <span id="recipe"></span></p>
     <p><strong>Дескрипторы:</strong> <span id="notes"></span></p>
-  </di
+  </div>
+</section>
+
+<section class="add-coffee">
+  <h2>Добавить своё зерно</h2>
+  <input type="text" id="newName" placeholder="Название зерна">
+  <input type="text" id="newClicks" placeholder="Клики">
+  <input type="text" id="newRecipe" placeholder="Рецепт">
+  <textarea id="newNotes" placeholder="Дескрипторы вкуса"></textarea>
+  <button onclick="addCoffee()">Добавить</button>
+</section>
+
+<script>
+let coffees = {
+  brazil: { clicks: "34 клика", recipe: "18г → 36г за 28с", notes: "шоколад, орех, карамель" },
+  ethiopia: { clicks: "38 кликов", recipe: "18г → 40г за 30с", notes: "бергамот, цитрус, жасмин" }
+};
+
+function saveCoffees() {
+  localStorage.setItem('coffees', JSON.stringify(coffees));
+}
+
+function loadCoffees() {
+  const saved = localStorage.getItem('coffees');
+  if (saved) {
+    coffees = JSON.parse(saved);
+  }
+  const select = document.getElementById('coffeeSelect');
+  select.innerHTML = '<option value="">— выбрать —</option>';
+  for (const key in coffees) {
+    const option = document.createElement('option');
+    option.value = key;
+    option.textContent = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    select.appendChild(option);
+  }
+}
+
+function showCoffee() {
+  const value = document.getElementById("coffeeSelect").value;
+  if (!value) return;
+  const coffee = coffees[value];
+  document.getElementById("clicks").textContent = coffee.clicks;
+  document.getElementById("recipe").textContent = coffee.recipe;
+  document.getElementById("notes").textContent = coffee.notes;
+  document.getElementById("result").style.display = "block";
+}
+
+function addCoffee() {
+  const name = document.getElementById("newName").value.trim();
+  const clicks = document.getElementById("newClicks").value.trim();
+  const recipe = document.getElementById("newRecipe").value.trim();
+  const notes = document.getElementById("newNotes").value.trim();
+  if(!name || !clicks || !recipe || !notes) return alert('Заполните все поля');
+
+  const key = name.toLowerCase().replace(/\s+/g, '_');
+  coffees[key] = { clicks, recipe, notes };
+
+  const select = document.getElementById('coffeeSelect');
+  const option = document.createElement('option');
+  option.value = key;
+  option.textContent = name;
+  select.appendChild(option);
+
+  saveCoffees();
+
+  document.getElementById('newName').value = '';
+  document.getElementById('newClicks').value = '';
+  document.getElementById('newRecipe').value = '';
+  document.getElementById('newNotes').value = '';
+
+  alert('Зерно добавлено!');
+}
+
+window.onload = loadCoffees;
+</script>
+
+</body>
+</html>
