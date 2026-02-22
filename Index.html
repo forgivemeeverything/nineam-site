@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coffee Grinder — Grind Guide</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #0f0f0f;
+  color: #f5f5f5;
+}
+
+header {
+  padding: 80px 20px;
+  text-align: center;
+  background: linear-gradient(180deg, #1a1a1a, #0f0f0f);
+}
+
+h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #bbb;
+}
+
+section {
+  padding: 60px 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.card {
+  background: #1a1a1a;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.result {
+  margin-top: 20px;
+}
+
+footer {
+  text-align: center;
+  padding: 40px;
+  color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Precision Coffee Grinder</h1>
+  <p class="subtitle">Гиковский контроль помола и журнал тестов зерна</p>
+</header>
+
+<section>
+  <h2>Почему эта кофемолка</h2>
+  <div class="grid">
+    <div class="card">Внешняя регулировка с высокой точностью</div>
+    <div class="card">38 мм жернова с чистым профилем помола</div>
+    <div class="card">Магнитный стакан — минимум статики</div>
+    <div class="card">Идеальна для эспрессо и фильтра</div>
+  </div>
+</section>
+
+<section>
+  <h2>Журнал тестов зерна</h2>
+  <div class="card">
+    <label>Выбери зерно:</label>
+    <select id="coffeeSelect" onchange="showCoffee()">
+      <option value="">— выбрать —</option>
+      <option value="brazil">Бразилия Серрадо</option>
+      <option value="ethiopia">Эфиопия Натурал</option>
+    </select>
+
+    <div class="result" id="result" style="display:none;">
+      <p><strong>Клики:</strong> <span id="clicks"></span></p>
+      <p><strong>Рецепт:</strong> <span id="recipe"></span></p>
+      <p><strong>Дескрипторы:</strong> <span id="notes"></span></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Характеристики</h2>
+  <div class="card">
+    <ul>
+      <li>38 мм жернова</li>
+      <li>72 клика на оборот</li>
+      <li>Шаг 16 микрон</li>
+      <li>Вес 620 г</li>
+      <li>Ёмкость 30 г</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  Coffee Grinder Project — Grind Log
+</footer>
+
+<script>
+const coffees = {
+  brazil: {
+    clicks: "34 клика",
+    recipe: "18г → 36г за 28с",
+    notes: "шоколад, орех, карамель"
+  },
+  ethiopia: {
+    clicks: "38 кликов",
+    recipe: "18г → 40г за 30с",
+    notes: "бергамот, цитрус, жасмин"
+  }
+};
+
+function showCoffee() {
+  const value = document.getElementById("coffeeSelect").value;
+  if (!value) return;
+
+  const coffee = coffees[value];
+
+  document.getElementById("clicks").textContent = coffee.clicks;
+  document.getElementById("recipe").textContent = coffee.recipe;
+  document.getElementById("notes").textContent = coffee.notes;
+
+  document.getElementById("result").style.display = "block";
+}
+</script>
+
+</body>
+</html>
